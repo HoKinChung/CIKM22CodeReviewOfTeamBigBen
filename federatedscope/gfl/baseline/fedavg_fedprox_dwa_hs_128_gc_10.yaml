@@ -1,0 +1,53 @@
+use_gpu: True
+device: 0
+early_stop:
+  patience: 10
+  improve_indicator_mode: mean
+  the_smaller_the_better: False
+federate:
+  mode: 'standalone'
+  # method: default 'fedavg', other options 'fedem' 'fedopt'
+  # method: 'fedopt'
+  make_global_eval: False
+  total_round_num: 100
+  share_local_model: False
+  online_aggr: False
+  client_num: 13
+  data_weighted_aggr: True
+  # for fedopt
+  # sample_client_rate: 0.8
+# fedopt:
+#   use: True
+fedprox:
+  use: True
+  mu: 0.05 # 0.001 0.01 0.05 0.1 0.5
+data:
+  root: /Users/winston/CodingSpace/CIKM2022AnalytiCupCompetition/FormalData/
+  type: cikmcup
+model:
+  type: gin # mlp, quadratic, 'gcn', 'sage', 'gpr', 'gat', 'gin', 'mpnn', 'convnet2', 'convnet5', 'vgg11', 'lr', 'transformers', 'vmfnet', 'hmfnet'
+  hidden: 128
+  dropout: 0.3
+  # align the model type of clients
+  # task: graphClassification
+  # when federate.method is 'fedem'
+  # model_num_per_trainer: 1
+personalization:
+  local_param: ['encoder_atom', 'encoder', 'clf', 'norms']
+train:
+  batch_or_epoch: epoch
+  local_update_steps: 15
+  optimizer:
+    weight_decay: 0.0005
+    type: SGD
+# finetune:
+#   before_eval: True
+trainer:
+  type: graphminibatch_trainer
+eval:
+  freq: 5
+  metrics: ['imp_ratio']
+  # report: ['avg']
+  # best_res_update_round_wise_key: val_imp_ratio
+  # count_flops: False
+  # base: 0.
